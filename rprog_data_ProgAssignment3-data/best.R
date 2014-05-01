@@ -5,6 +5,12 @@ best <- function( state, outcome){
     data[,11]<-as.numeric(data[,11])
     data[,17]<-as.numeric(data[,17])
     data[,23]<-as.numeric(data[,23])
+
+    mRatesCols = list("heart attack"="Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack",
+                      "heart failure"="Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure",
+                      "pneumonia"="Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia")
+    
+    
     
     # Check that state and outcome are valid
     validStates = unique(data$State)
@@ -19,14 +25,12 @@ best <- function( state, outcome){
     # Return hospital name in that state with lowest
     # 30-day death rate
     
-    # Define columns to be searched
-    mRatesCols = list("heart attack"="Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack",
-                      "heart failure"="Hospital.30.Day.Death..Mortality..Rates.from.Heart.Failure",
-                      "pneumonia"="Hospital.30.Day.Death..Mortality..Rates.from.Pneumonia")
-    mRates = data[[mRatesCols[[outcome]]]][data$State==state]
+    # Define the correspondent mortality rate column
+    mortalityCol = mRatesCols[[outcome]]
+    stateData = data[data$State==state,]
     # Idx from mRates NOT FROM THE WHOLE DATAFRAME
-    bestIdx = which.min(mRates)
-    best = data$Hospital.Name[bestIdx]
+    bestIdx = which.min(stateData[[mortalityCol]])
+    best = stateData$Hospital.Name[bestIdx]
     return(best)
 
 }
