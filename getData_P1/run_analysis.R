@@ -11,5 +11,10 @@ allData = rbind(testData, trainData)
 
 # Extract columns with mean and stds
 cindex = sort(c(grep("std", features[,2], 2), grep("mean", features[,2], 2)))
-usefulCols = features[sort(c(grep("std", features[,2], 2), grep("mean", features[,2], 2))), 2]
+# Columns of Jerk and Fourier signals (Not want them)
+dropCols = c(grep("Jerk", features[,2]), grep("fBody", features[,2]))
+cindex = cindex[!(cindex %in% dropCols)]
+
+# Get the final columns to be used
 cleanData = allData[, cindex]
+
